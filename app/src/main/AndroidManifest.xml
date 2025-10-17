@@ -14,15 +14,16 @@
         android:theme="@style/Theme.Road_Map_Android">
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="myapp" />
-                <data android:host="open" />
+                <data android:scheme="https" />
+                <data android:host="my_app" />
             </intent-filter>
         </activity>
         <activity

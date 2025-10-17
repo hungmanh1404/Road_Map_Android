@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Road_Map_Android</string>
+
+    <string name="user_info">User Info:\nName: %s \nAge: %d</string>
 </resources>

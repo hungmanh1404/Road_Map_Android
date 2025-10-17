@@ -23,17 +23,24 @@ class Activity3 : AppCompatActivity() {
     private fun setupClickListeners() {
         binding?.run {
             btnSendToActivity2.setOnClickListener {
-                val intent = Intent()
-                intent.putExtra("result_from_activity3", "Data from Activity3: Success!")
-                setResult(RESULT_OK, intent)
-                finish()
+                sendDataToActivity2()
             }
 
             btnGoToActivity1.setOnClickListener {
-                val intent = Intent(root.context, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                startActivity(intent)
+                MainActivity.start(context = this@Activity3)
             }
         }
+    }
+
+    private fun sendDataToActivity2() {
+        Intent().apply {
+            putExtra(KEY_RESULT, "Data from Activity3: Success!")
+            setResult(RESULT_OK, this)
+            finish()
+        }
+    }
+
+    companion object {
+        internal const val KEY_RESULT = "result_from_activity3"
     }
 }
