@@ -4,17 +4,19 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.road_map_android.Activity3.Companion.KEY_RESULT
 import com.example.road_map_android.data.vo.User
 import com.example.road_map_android.databinding.Activity2Binding
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 class Activity2 : AppCompatActivity() {
     private var _binding: Activity2Binding? = null
     private val binding get() = _binding
-
+    private var bottomSheetBehavior: BottomSheetBehavior<View>? = null
     private val activityResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -29,6 +31,7 @@ class Activity2 : AppCompatActivity() {
         setContentView(binding?.root)
 
         initViews()
+        setupBottomSheet()
         setupClickListeners()
         receiveDataFromActivity1()
     }
@@ -45,21 +48,39 @@ class Activity2 : AppCompatActivity() {
     }
 
     private fun initViews() {
-        binding?.tvResultFromActivity3?.visibility = android.view.View.GONE
+        binding?.tvResultFromActivity3?.visibility = View.GONE
     }
 
     private fun onListenResultActivity3(result: ActivityResult) {
         result.data?.getStringExtra(KEY_RESULT)?.let {
             binding?.tvResultFromActivity3?.run {
                 text = "Result from Activity3: $it"
-                visibility = android.view.View.VISIBLE
+                visibility = View.VISIBLE
             }
         }
     }
 
     private fun setupClickListeners() {
-        binding?.btnGoToActivity3?.setOnClickListener {
-            openActivity3()
+        binding?.run {
+            btnGoToActivity3.setOnClickListener {
+                openActivity3()
+            }
+
+            btnOpenBottomSheet.setOnClickListener {
+                showBottomSheet()
+            }
+
+            btnBottomSheetAction1.setOnClickListener {
+                hideBottomSheet()
+            }
+
+            btnBottomSheetAction2.setOnClickListener {
+                hideBottomSheet()
+            }
+
+            binding?.btnBottomSheetAction3?.setOnClickListener {
+                hideBottomSheet()
+            }
         }
     }
 
@@ -79,6 +100,26 @@ class Activity2 : AppCompatActivity() {
         Intent(this, Activity3::class.java).apply {
             activityResultLauncher.launch(this)
         }
+    }
+
+    private fun setupBottomSheet() {
+        binding?.bottomSheet?.let { bottomSheet ->
+            bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+            bottomSheetBehavior?.apply {
+                isHideable = true
+                peekHeight = 0
+                skipCollapsed = true
+                state = BottomSheetBehavior.STATE_HIDDEN
+            }
+        }
+    }
+
+    private fun showBottomSheet() {
+        bottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+    }
+
+    private fun hideBottomSheet() {
+        bottomSheetBehavior?.state = BottomSheetBehavior.STATE_HIDDEN
     }
 
     override fun onDestroy() {
