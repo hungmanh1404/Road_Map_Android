@@ -9,6 +9,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.example.road_map_android.data.vo.User
 import com.example.road_map_android.databinding.ActivityMainBinding
@@ -69,7 +70,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupDrawer() = binding?.run {
         setSupportActionBar(toolbar)
-
         ActionBarDrawerToggle(
             this@MainActivity,
             drawerLayout,
@@ -81,12 +81,13 @@ class MainActivity : AppCompatActivity() {
             syncState()
         }
 
-        drawerLayout.setOnTouchListener { _, event ->
-            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-                return@setOnTouchListener true
-            }
-            false
-        }
+//        drawerLayout.setOnTouchListener { _, event ->
+//            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+//                return@setOnTouchListener true
+//            }
+//            false
+//        }
+
 
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
@@ -119,7 +120,6 @@ class MainActivity : AppCompatActivity() {
         binding?.navigationView?.menu?.let { menu ->
             // Reset all menu items to unchecked first
             resetAllMenuItems(menu)
-
             // Then set the selected item to checked
             menu.findItem(menuItemId)?.isChecked = true
         }
@@ -133,6 +133,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showHome() = binding?.run {
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+        navigationView.setCheckedItem(R.id.nav_home)
+        setSelectedMenuItem(R.id.nav_home)
         main.visibility = View.VISIBLE
         fragmentContainer.visibility = View.GONE
         currentFragment = null
@@ -142,15 +145,14 @@ class MainActivity : AppCompatActivity() {
     private fun showFragment(fragment: Fragment) = binding?.run {
         main.visibility = View.GONE
         fragmentContainer.visibility = View.VISIBLE
-
         if (currentFragment != fragment) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragmentContainer, fragment)
                 .commit()
             currentFragment = fragment
         }
-
         isFragmentVisible = true
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
     }
 
 

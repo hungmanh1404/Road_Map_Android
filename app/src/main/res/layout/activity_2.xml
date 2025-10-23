@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity2">
+    android:clickable="true"
+    android:focusable="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main"
@@ -57,8 +57,8 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
             android:text="Result from Activity3:"
-            android:textSize="16sp"
             android:textColor="#FF6200EE"
+            android:textSize="16sp"
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/btnGoToActivity3"
             app:layout_constraintEnd_toEndOf="parent"
@@ -90,53 +90,72 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Bottom Sheet -->
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottomSheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@android:color/white"
+        android:background="@drawable/bottom_sheet_background"
+        android:clickable="true"
         android:elevation="8dp"
-        app:layout_behavior="@string/bottom_sheet_behavior">
+        android:focusable="true"
+        android:orientation="vertical"
+        app:behavior_draggable="true"
+        app:behavior_halfExpandedRatio="0.5"
+        app:behavior_hideable="true"
+        app:layout_behavior="com.example.road_map_android.CustomBottomSheetBehavior">
 
-        <!-- Bottom Sheet Handle -->
-        <View
-            android:layout_width="40dp"
-            android:layout_height="4dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@android:color/darker_gray" />
-
-        <!-- Bottom Sheet Content -->
-        <TextView
+        <LinearLayout
+            android:id="@+id/handleBottomSheet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvTitleBottomSheet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="Bottom Sheet Demo"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:gravity="center"
-            android:padding="16dp" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/handleBottomSheet" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="16dp"
+            app:layout_constraintTop_toBottomOf="@id/tvTitleBottomSheet">
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewBottomSheet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <Button
                 android:id="@+id/btnBottomSheetAction1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Action 1"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginBottom="8dp"
+                android:text="Action 1" />
 
             <Button
                 android:id="@+id/btnBottomSheetAction2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Action 2"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginBottom="8dp"
+                android:text="Action 2" />
 
             <Button
                 android:id="@+id/btnBottomSheetAction3"
@@ -144,8 +163,19 @@
                 android:layout_height="wrap_content"
                 android:text="Action 3" />
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/filledTextField"
+                style="?attr/textInputFilledStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/app_name">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

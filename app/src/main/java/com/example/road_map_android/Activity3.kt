@@ -18,7 +18,9 @@ class Activity3 : AppCompatActivity() {
         setupClickListeners()
     }
 
-    private fun initViews() {}
+    private fun initViews() {
+        binding?.btnSendToActivity2?.isEnabled = false
+    }
 
     private fun setupClickListeners() {
         binding?.run {

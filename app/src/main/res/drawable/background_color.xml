@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Nền khi disabled -->
+    <item android:state_enabled="false">
+        <shape android:shape="rectangle">
+            <solid android:color="#D72C2C" />
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
+
+    <!-- Nền khi enabled -->
+    <item android:state_enabled="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#6200EE" />
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
+
+</selector>

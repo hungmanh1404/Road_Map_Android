@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    android:focusable="true"
+    android:clickable="true"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Activity3">
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/tvTitle"
@@ -19,6 +19,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+    android:id="@+id/tvDescription2"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:text="Đây là một đoạn văn bản rất dài để minh họa cho layout_constrainedWidth trong ConstraintLayout. Nếu không bật thuộc tính này, text có thể bị tràn ra ngoài màn hình."
+    android:background="#E0E0E0"
+    app:layout_constrainedWidth="true"
+    app:layout_constraintStart_toStartOf="parent" app:layout_constraintDimensionRatio="H,16:9"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvDescription"
@@ -36,6 +47,8 @@
 
     <Button
         android:id="@+id/btnSendToActivity2"
+        android:textColor="@color/button_background"
+        android:background="@drawable/background_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"

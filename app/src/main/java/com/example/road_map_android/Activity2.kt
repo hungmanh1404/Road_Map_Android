@@ -8,7 +8,12 @@ import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.road_map_android.Activity3.Companion.KEY_RESULT
+import com.example.road_map_android.adapters.JobSelectAdapter
+import com.example.road_map_android.data.vo.Job
 import com.example.road_map_android.data.vo.User
 import com.example.road_map_android.databinding.Activity2Binding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -16,12 +21,31 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 class Activity2 : AppCompatActivity() {
     private var _binding: Activity2Binding? = null
     private val binding get() = _binding
-    private var bottomSheetBehavior: BottomSheetBehavior<View>? = null
+    private var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>? = null
+    private var jobSelectAdapter: JobSelectAdapter? = null
+    private var initData: MutableList<Job> = mutableListOf()
     private val activityResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == RESULT_OK) {
             onListenResultActivity3(result)
+        }
+    }
+
+    val items = listOf(
+        Job(1, "Item 1 Job To Home", "content 1"),
+        Job(2, "Item 2 Job Remote", "content 2"),
+        Job(3, "Item 3 Teacher", "content 3")
+    )
+
+    init {
+        reInitData(items)
+    }
+
+    private fun reInitData(data: List<Job>) {
+        initData.apply {
+            clear()
+            addAll(data)
         }
     }
 
@@ -48,7 +72,23 @@ class Activity2 : AppCompatActivity() {
     }
 
     private fun initViews() {
-        binding?.tvResultFromActivity3?.visibility = View.GONE
+        binding?.run {
+            tvResultFromActivity3.visibility = View.GONE
+            jobSelectAdapter = JobSelectAdapter(
+                items = initData,
+                onItemClick = { item ->
+                    tvTitle.text = item.name
+                    reInitData(items.filter {
+                        it != item
+                    })
+                    jobSelectAdapter?.notifyDataSetChanged()
+                    hideBottomSheet()
+                }
+            )
+
+            recyclerViewBottomSheet.layoutManager = LinearLayoutManager(this@Activity2, RecyclerView.HORIZONTAL, false )
+            recyclerViewBottomSheet.adapter = jobSelectAdapter
+        }
     }
 
     private fun onListenResultActivity3(result: ActivityResult) {
@@ -70,15 +110,7 @@ class Activity2 : AppCompatActivity() {
                 showBottomSheet()
             }
 
-            btnBottomSheetAction1.setOnClickListener {
-                hideBottomSheet()
-            }
-
-            btnBottomSheetAction2.setOnClickListener {
-                hideBottomSheet()
-            }
-
-            binding?.btnBottomSheetAction3?.setOnClickListener {
+            main.setOnClickListener {
                 hideBottomSheet()
             }
         }
@@ -103,13 +135,23 @@ class Activity2 : AppCompatActivity() {
     }
 
     private fun setupBottomSheet() {
-        binding?.bottomSheet?.let { bottomSheet ->
-            bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-            bottomSheetBehavior?.apply {
-                isHideable = true
-                peekHeight = 0
-                skipCollapsed = true
+        binding?.run {
+            bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet).apply {
                 state = BottomSheetBehavior.STATE_HIDDEN
+                handleBottomSheet.setOnClickListener {
+                    when (this.state) {
+                        BottomSheetBehavior.STATE_EXPANDED -> {
+                            this.state = BottomSheetBehavior.STATE_COLLAPSED
+                        }
+
+                        BottomSheetBehavior.STATE_COLLAPSED, BottomSheetBehavior.STATE_HALF_EXPANDED -> {
+                            this.state = BottomSheetBehavior.STATE_EXPANDED
+                        }
+
+                        else -> {
+                        }
+                    }
+                }
             }
         }
     }
@@ -128,10 +170,8 @@ class Activity2 : AppCompatActivity() {
     }
 
     companion object {
-
         private const val KEY_MESSAGE = "message"
         private const val KEY_USER = "user"
-
         internal fun start(context: Context, message: String, user: User) {
             Intent(context, Activity2::class.java).apply {
                 putExtra(KEY_MESSAGE, message)
