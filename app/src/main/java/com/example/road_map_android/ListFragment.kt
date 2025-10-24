@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.road_map_android.adapters.GameAdapter
 import com.example.road_map_android.adapters.TransactionAdapter
 import com.example.road_map_android.data.vo.Game
-import com.example.road_map_android.data.vo.TransactionItem
+import com.example.road_map_android.data.vo.TransactionListItem
 import com.example.road_map_android.databinding.FragmentListBinding
 
 class ListFragment : Fragment() {
@@ -38,13 +38,49 @@ class ListFragment : Fragment() {
         )
     )
 
-    val fakeData = listOf(
-        TransactionItem.Title("December 2019"),
-        TransactionItem.Transaction("29", "Rs2.00", "demo", true, "1"),
-        TransactionItem.Title("October 2019"),
-        TransactionItem.Transaction("29", "Rs2.00", "demo", true, "2"),
-        TransactionItem.Transaction("25", "Rs12.00", "demo", false, "3"),
-        TransactionItem.Transaction("25", "Rs11.50", "demo", false, "4")
+    val transactionData = mutableListOf<TransactionListItem>(
+        TransactionListItem.Title("December 2019"),
+        TransactionListItem.Transaction(
+            id = "TX-1001",
+            date = "29",
+            amount = "Rs2.00",
+            type = "Business",
+            isPositive = true,
+            details = listOf(
+                TransactionListItem.Detail("ID", "TX-1001"),
+                TransactionListItem.Detail("Location", "New Delhi"),
+                TransactionListItem.Detail("Time", "09:45 AM")
+            )
+        ),
+        TransactionListItem.Title("October 2019"),
+        TransactionListItem.Transaction(
+            id = "TX-1002",
+            date = "25",
+            amount = "Rs11.50",
+            type = "Shopping",
+            isPositive = false,
+            details = listOf(
+                TransactionListItem.Detail("ID", "TX-1002"),
+                TransactionListItem.Detail("Location", "Mumbai"),
+                TransactionListItem.Detail("Time", "07:20 PM")
+            )
+        ),
+        TransactionListItem.Title("September 2019"),
+        TransactionListItem.Transaction(
+            id = "TX-1003",
+            date = "15",
+            amount = "Rs5.25",
+            type = "Food",
+            isPositive = false,
+            details = listOf(
+                TransactionListItem.Detail("ID", "TX-1003"),
+                TransactionListItem.Detail("Location", "Bangalore"),
+                TransactionListItem.Detail("Time", "12:30 PM"),
+                TransactionListItem.Detail("ID", "TX-1003"),
+                TransactionListItem.Detail("Location", "Bangalore"),
+                TransactionListItem.Detail("Time", "12:30 PM")
+            )
+        )
     )
 
     private var _binding: FragmentListBinding? = null
@@ -73,7 +109,12 @@ class ListFragment : Fragment() {
             items = gameList
         )
 
-        transactionAdapter = TransactionAdapter(fakeData)
+        transactionAdapter = TransactionAdapter(
+            items = transactionData,
+            onTransactionClick = { position ->
+                transactionAdapter?.toggleTransaction(position)
+            }
+        )
 
         binding?.run {
             recyclerViewGame.layoutManager =
